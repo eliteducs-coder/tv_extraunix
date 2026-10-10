@@ -1,0 +1,36 @@
+name: Build Smart TV APK
+on:
+  workflow_dispatch:
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install buildozer
+        run: pip install buildozer cython
+        
+      - name: Install dependencies
+        run: sudo apt update && sudo apt-get install -y openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses-dev cmake libffi-dev libssl-dev zip unzip
+        
+      - name: Initialize and Configure buildozer
+        run: |
+          yes | buildozer init
+          sed -i 's/orientation = portrait/orientation = landscape/' buildozer.spec
+          sed -i 's/requirements = python3,kivy/requirements = python3,kivy,ffpyplayer/' buildozer.spec
+          sed -i 's/#android.permissions = INTERNET/android.permissions = INTERNET/' buildozer.spec
+          
+      - name: Build APK
+        run: yes | buildozer -v android debug
+        
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: SmartTV-APK
+          path: bin/*.apk
