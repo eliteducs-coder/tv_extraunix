@@ -17,8 +17,8 @@ jobs:
         run: pip install buildozer "cython<3"
         
       - name: Install dependencies
-        # تمت إضافة libtool-bin و m4 لحل مشكلة LT_SYS_SYMBOL_USCORE
-        run: sudo apt update && sudo apt-get install -y openjdk-17-jdk autoconf libtool libtool-bin m4 pkg-config zlib1g-dev libncurses-dev cmake libffi-dev libssl-dev zip unzip ffmpeg libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+        # تمت إضافة automake و libltdl-dev لحل خطأ LT_SYS_SYMBOL_USCORE في أوبونتو 24
+        run: sudo apt update && sudo apt-get install -y openjdk-17-jdk autoconf automake libtool libtool-bin m4 pkg-config zlib1g-dev libncurses-dev cmake libffi-dev libssl-dev libltdl-dev zip unzip ffmpeg libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
         
       - name: Initialize and Configure buildozer
         run: |
